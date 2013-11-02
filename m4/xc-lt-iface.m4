@@ -263,7 +263,7 @@ elif test "x$allow_undefined_flag" = 'xunsupported'; then
   xc_lt_shlib_use_no_undefined='yes'
 fi
 case $host_os in @%:@ (
-  cygwin* | mingw* | pw32* | cegcc* | os2* | aix*)
+  cygwin* | msys* | mingw* | pw32* | cegcc* | os2* | aix*)
     xc_lt_shlib_use_no_undefined='yes'
     ;;
 esac
