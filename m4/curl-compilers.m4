@@ -904,7 +904,7 @@ AC_DEFUN([CURL_SET_COMPILER_WARNING_OPTS], [
           dnl Only clang 3.2 or later
           if test "$compiler_num" -ge "302"; then
             case $host_os in
-            cygwin* | mingw*)
+            cygwin* | msys* | mingw*)
               dnl skip missing-variable-declarations warnings for cygwin and
               dnl mingw because the libtool wrapper executable causes them
               ;;
