@@ -577,9 +577,9 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
 #if defined(__MINGW32__)
   const size_t path_max = PATH_MAX;
   char relocated[path_max];
-  get_executable_path(NULL, &relocated, path_max);
-  strip_n_suffix_folders(&relocated, 1);
-  strncat(&relocated, "/", path_max);
+  get_dll_path(relocated, path_max);
+  strip_n_suffix_folders(relocated, 1);
+  strncat(relocated, "/", path_max);
   char * relative = get_relative_path(CURL_BINDIR, CURL_CA_BUNDLE);
   strncat(relocated, relative, path_max);
   simplify_path(relocated);
