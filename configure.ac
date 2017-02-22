@@ -3618,6 +3618,7 @@ if test "xyes" = "x$longlong"; then
   ])
 fi
 
+AC_DEFINE_UNQUOTED(CURL_BINDIR, "${prefix}/bin", [bindir])
 
 # check for ssize_t
 AC_CHECK_TYPE(ssize_t, ,
