@@ -12,6 +12,9 @@
 /* Default SSL backend */
 #undef CURL_DEFAULT_SSL_BACKEND
 
+/* Location of executable */
+#undef CURL_BINDIR
+
 /* to disable cookies support */
 #undef CURL_DISABLE_COOKIES
 
