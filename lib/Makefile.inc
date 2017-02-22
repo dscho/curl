@@ -174,6 +174,7 @@ LIB_CFILES =         \
   nonblock.c         \
   openldap.c         \
   parsedate.c        \
+  pathtools.c        \
   pingpong.c         \
   pop3.c             \
   progress.c         \
@@ -294,6 +295,7 @@ LIB_HFILES =         \
   non-ascii.h        \
   nonblock.h         \
   parsedate.h        \
+  pathtools.h        \
   pingpong.h         \
   pop3.h             \
   progress.h         \

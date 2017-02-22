@@ -12,6 +12,9 @@
 /* Location of default ca path */
 #undef CURL_CA_PATH
 
+/* Location of executable */
+#undef CURL_BINDIR
+
 /* Default SSL backend */
 #undef CURL_DEFAULT_SSL_BACKEND
 
