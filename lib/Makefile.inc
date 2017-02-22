@@ -37,7 +37,8 @@ LIB_VTLS_HFILES = vtls/openssl.h vtls/vtls.h vtls/gtls.h                \
   vtls/cyassl.h vtls/schannel.h vtls/darwinssl.h vtls/gskit.h           \
   vtls/mbedtls.h vtls/mesalink.h
 
-LIB_CFILES = file.c timeval.c base64.c hostip.c progress.c formdata.c   \
+LIB_CFILES = \
+  pathtools.c file.c timeval.c base64.c hostip.c progress.c formdata.c   \
   cookie.c http.c sendf.c ftp.c url.c dict.c if2ip.c speedcheck.c       \
   ldap.c version.c getenv.c escape.c mprintf.c telnet.c netrc.c         \
   getinfo.c transfer.c strcase.c easy.c security.c curl_fnmatch.c       \
@@ -57,7 +58,8 @@ LIB_CFILES = file.c timeval.c base64.c hostip.c progress.c formdata.c   \
   mime.c sha256.c setopt.c curl_path.c curl_ctype.c curl_range.c psl.c  \
   doh.c urlapi.c
 
-LIB_HFILES = arpa_telnet.h netrc.h file.h timeval.h hostip.h progress.h \
+LIB_HFILES = \
+  pathtools.h arpa_telnet.h netrc.h file.h timeval.h hostip.h progress.h \
   formdata.h cookie.h http.h sendf.h ftp.h url.h dict.h if2ip.h         \
   speedcheck.h urldata.h curl_ldap.h escape.h telnet.h getinfo.h        \
   strcase.h curl_sec.h memdebug.h http_chunks.h curl_fnmatch.h          \
