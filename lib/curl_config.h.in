@@ -9,6 +9,9 @@
 /* Location of default ca path */
 #undef CURL_CA_PATH
 
+/* Location of executable */
+#undef CURL_BINDIR
+
 /* to disable cookies support */
 #undef CURL_DISABLE_COOKIES
 

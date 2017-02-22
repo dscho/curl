@@ -119,6 +119,9 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
 #include "pipeline.h"
 #include "dotdot.h"
 #include "strdup.h"
+#if defined(__MINGW32__)
+#include "pathtools.h"
+#endif
 /* The last 3 #include files should be in this order */
 #include "curl_printf.h"
 #include "curl_memory.h"
@@ -571,7 +574,20 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
 
   /* This is our preferred CA cert bundle/path since install time */
 #if defined(CURL_CA_BUNDLE)
+#if defined(__MINGW32__)
+  const size_t path_max = PATH_MAX;
+  char relocated[path_max];
+  get_executable_path(NULL, &relocated, path_max);
+  strip_n_suffix_folders(&relocated, 1);
+  strncat(&relocated, "/", path_max);
+  char * relative = get_relative_path(CURL_BINDIR, CURL_CA_BUNDLE);
+  strncat(relocated, relative, path_max);
+  simplify_path(relocated);
+  result = setstropt(&set->str[STRING_SSL_CAFILE_ORIG], (char *) relocated);
+  free((void*)relative);
+#else
   result = setstropt(&set->str[STRING_SSL_CAFILE_ORIG], CURL_CA_BUNDLE);
+#endif /* defined(__MINGW32__) */
   if(result)
     return result;
 
