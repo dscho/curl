@@ -165,7 +165,7 @@ curl_verbose_msg="enabled (--disable-verbose)"
   curl_mtlnk_msg="no      (--with-libmetalink)"
     curl_psl_msg="no      (--with-libpsl)"
 
-    init_ssl_msg=${curl_ssl_msg}
+    ssl_backends=
 
 dnl
 dnl Save some initial values the user might have provided
@@ -1347,13 +1347,14 @@ AC_HELP_STRING([--without-winssl], [disable Windows native SSL/TLS]),
   OPT_WINSSL=$withval)
 
 AC_MSG_CHECKING([whether to enable Windows native SSL/TLS (Windows native builds only)])
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_WINSSL" != xno; then
+  ssl_msg=
   if test "x$OPT_WINSSL" != "xno"  &&
      test "x$curl_cv_native_windows" = "xyes"; then
     AC_MSG_RESULT(yes)
     AC_DEFINE(USE_SCHANNEL, 1, [to enable Windows native SSL/TLS support])
     AC_SUBST(USE_SCHANNEL, [1])
-    curl_ssl_msg="enabled (Windows-native)"
+    ssl_msg="Windows-native"
     WINSSL_ENABLED=1
     # --with-winssl implies --enable-sspi
     AC_DEFINE(USE_WINDOWS_SSPI, 1, [to enable SSPI support])
@@ -1363,6 +1364,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
   else
     AC_MSG_RESULT(no)
   fi
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 else
   AC_MSG_RESULT(no)
 fi
@@ -1374,18 +1376,19 @@ AC_HELP_STRING([--without-darwinssl], [disable Apple OS native SSL/TLS]),
   OPT_DARWINSSL=$withval)
 
 AC_MSG_CHECKING([whether to enable Apple OS native SSL/TLS])
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_DARWINSSL" != xno; then
   if test "x$OPT_DARWINSSL" != "xno" &&
      test -d "/System/Library/Frameworks/Security.framework"; then
     AC_MSG_RESULT(yes)
     AC_DEFINE(USE_DARWINSSL, 1, [to enable Apple OS native SSL/TLS support])
     AC_SUBST(USE_DARWINSSL, [1])
-    curl_ssl_msg="enabled (Apple OS-native)"
+    ssl_msg="$ssh_backends, Apple OS-native"
     DARWINSSL_ENABLED=1
     LDFLAGS="$LDFLAGS -framework CoreFoundation -framework Security"
   else
     AC_MSG_RESULT(no)
   fi
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 else
   AC_MSG_RESULT(no)
 fi
@@ -1403,7 +1406,10 @@ AC_HELP_STRING([--with-ssl=PATH],[Where to look for OpenSSL, PATH points to the 
 AC_HELP_STRING([--without-ssl], [disable OpenSSL]),
   OPT_SSL=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
+if test -z "$ssl_backends" -o "x$OPT_SSL" != xno &&
+   test X"$OPT_SSL" != Xno; then
+  ssl_msg=
+
   dnl backup the pre-ssl variables
   CLEANLDFLAGS="$LDFLAGS"
   CLEANCPPFLAGS="$CPPFLAGS"
@@ -1584,7 +1590,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
       dnl Have the libraries--check for OpenSSL headers
       AC_CHECK_HEADERS(openssl/x509.h openssl/rsa.h openssl/crypto.h \
                        openssl/pem.h openssl/ssl.h openssl/err.h,
-        curl_ssl_msg="enabled (OpenSSL)"
+        ssl_msg="OpenSSL"
         OPENSSL_ENABLED=1
         AC_DEFINE(USE_OPENSSL, 1, [if OpenSSL is in use]))
 
@@ -1598,7 +1604,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
            test $ac_cv_header_crypto_h = yes &&
            test $ac_cv_header_ssl_h = yes; then
           dnl three matches
-          curl_ssl_msg="enabled (OpenSSL)"
+          ssl_msg="OpenSSL"
           OPENSSL_ENABLED=1
         fi
       fi
@@ -1649,7 +1655,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
         AC_MSG_RESULT([yes])
         AC_DEFINE_UNQUOTED(HAVE_BORINGSSL, 1,
                            [Define to 1 if using BoringSSL.])
-        curl_ssl_msg="enabled (BoringSSL)"
+        ssl_msg="BoringSSL"
     ],[
         AC_MSG_RESULT([no])
     ])
@@ -1665,7 +1671,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
       AC_MSG_RESULT([yes])
       AC_DEFINE_UNQUOTED(HAVE_LIBRESSL, 1,
         [Define to 1 if using libressl.])
-      curl_ssl_msg="enabled (libressl)"
+      ssl_msg="libressl"
     ],[
       AC_MSG_RESULT([no])
     ])
@@ -1685,6 +1691,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg" && test X"$OPT_SSL" != Xno; then
     CURL_CHECK_OPENSSL_API
   fi
 
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 dnl **********************************************************************
@@ -1746,7 +1753,8 @@ AC_HELP_STRING([--with-gnutls=PATH],[where to look for GnuTLS, PATH points to th
 AC_HELP_STRING([--without-gnutls], [disable GnuTLS detection]),
   OPT_GNUTLS=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_GNUTLS" != xno; then
+  ssl_msg=
 
   if test X"$OPT_GNUTLS" != Xno; then
 
@@ -1820,7 +1828,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
        AC_SUBST(USE_GNUTLS, [1])
        GNUTLS_ENABLED=1
        USE_GNUTLS="yes"
-       curl_ssl_msg="enabled (GnuTLS)"
+       ssl_msg="GnuTLS"
        ],
        [
          LIBS="$CLEANLIBS"
@@ -1848,6 +1856,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
 
   fi dnl GNUTLS not disabled
 
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 dnl ---
@@ -1905,7 +1914,8 @@ AC_HELP_STRING([--with-polarssl=PATH],[where to look for PolarSSL, PATH points t
 AC_HELP_STRING([--without-polarssl], [disable PolarSSL detection]),
   OPT_POLARSSL=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_POLARSSL" != xno; then
+  ssl_msg=
 
   if test X"$OPT_POLARSSL" != Xno; then
 
@@ -1923,7 +1933,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
          AC_SUBST(USE_POLARSSL, [1])
          POLARSSL_ENABLED=1
          USE_POLARSSL="yes"
-         curl_ssl_msg="enabled (PolarSSL)"
+         ssl_msg="PolarSSL"
         ])
     fi
 
@@ -1949,7 +1959,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
        AC_SUBST(USE_POLARSSL, [1])
        POLARSSL_ENABLED=1
        USE_POLARSSL="yes"
-       curl_ssl_msg="enabled (PolarSSL)"
+       ssl_msg="PolarSSL"
        ],
        [
          CPPFLAGS=$_cppflags
@@ -1977,6 +1987,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
 
   fi dnl PolarSSL not disabled
 
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 dnl ----------------------------------------------------
@@ -1992,7 +2003,8 @@ AC_HELP_STRING([--with-mbedtls=PATH],[where to look for mbedTLS, PATH points to 
 AC_HELP_STRING([--without-mbedtls], [disable mbedTLS detection]),
   OPT_MBEDTLS=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_MBEDTLS" != xno; then
+  ssl_msg=
 
   if test X"$OPT_MBEDTLS" != Xno; then
 
@@ -2010,7 +2022,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
          AC_SUBST(USE_MBEDTLS, [1])
          MBEDTLS_ENABLED=1
          USE_MBEDTLS="yes"
-         curl_ssl_msg="enabled (mbedTLS)"
+         ssl_msg="mbedTLS"
         ], [], -lmbedx509 -lmbedcrypto)
     fi
 
@@ -2036,7 +2048,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
        AC_SUBST(USE_MBEDTLS, [1])
        MBEDTLS_ENABLED=1
        USE_MBEDTLS="yes"
-       curl_ssl_msg="enabled (mbedTLS)"
+       ssl_msg="mbedTLS"
        ],
        [
          CPPFLAGS=$_cppflags
@@ -2064,6 +2076,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
 
   fi dnl mbedTLS not disabled
 
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 dnl ----------------------------------------------------
@@ -2080,7 +2093,8 @@ AC_HELP_STRING([--with-cyassl=PATH],[where to look for CyaSSL, PATH points to th
 AC_HELP_STRING([--without-cyassl], [disable CyaSSL detection]),
   OPT_CYASSL=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_CYASSL" != xno; then
+  ssl_msg=
 
   if test X"$OPT_CYASSL" != Xno; then
 
@@ -2102,7 +2116,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
          AC_SUBST(USE_CYASSL, [1])
          CYASSL_ENABLED=1
          USE_CYASSL="yes"
-         curl_ssl_msg="enabled (CyaSSL)"
+         ssl_msg="CyaSSL"
         ])
     fi
 
@@ -2128,7 +2142,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
        AC_SUBST(USE_CYASSL, [1])
        CYASSL_ENABLED=1
        USE_CYASSL="yes"
-       curl_ssl_msg="enabled (CyaSSL)"
+       ssl_msg="CyaSSL"
        ],
        [
          CPPFLAGS=$_cppflags
@@ -2173,7 +2187,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
          AC_SUBST(USE_CYASSL, [1])
          CYASSL_ENABLED=1
          USE_CYASSL="yes"
-         curl_ssl_msg="enabled (WolfSSL)"
+         ssl_msg="WolfSSL"
        ],
        [
          AC_MSG_RESULT(no)
@@ -2227,6 +2241,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
 
   fi dnl CyaSSL not disabled
 
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 dnl ----------------------------------------------------
@@ -2241,7 +2256,8 @@ AC_HELP_STRING([--with-nss=PATH],[where to look for NSS, PATH points to the inst
 AC_HELP_STRING([--without-nss], [disable NSS detection]),
   OPT_NSS=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_NSS" != xno; then
+  ssl_msg=
 
   if test X"$OPT_NSS" != Xno; then
 
@@ -2316,7 +2332,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
      AC_SUBST(USE_NSS, [1])
      USE_NSS="yes"
      NSS_ENABLED=1
-     curl_ssl_msg="enabled (NSS)"
+     ssl_msg="NSS"
      ],
      [
        LDFLAGS="$CLEANLDFLAGS"
@@ -2345,7 +2361,8 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
 
   fi dnl NSS not disabled
 
-fi dnl curl_ssl_msg = init_ssl_msg
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
+fi
 
 OPT_AXTLS=off
 
@@ -2354,7 +2371,8 @@ AC_HELP_STRING([--with-axtls=PATH],[Where to look for axTLS, PATH points to the 
 AC_HELP_STRING([--without-axtls], [disable axTLS]),
   OPT_AXTLS=$withval)
 
-if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+if test -z "$ssl_backends" -o "x$OPT_AXTLS" != xno; then
+  ssl_msg=
   if test X"$OPT_AXTLS" != Xno; then
     dnl backup the pre-axtls variables
     CLEANLDFLAGS="$LDFLAGS"
@@ -2388,7 +2406,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
       AC_SUBST(USE_AXTLS, [1])
       AXTLS_ENABLED=1
       USE_AXTLS="yes"
-      curl_ssl_msg="enabled (axTLS)"
+      ssl_msg="axTLS"
 
       if test "x$cross_compiling" != "xyes"; then
         LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$LIB_AXTLS"
@@ -2401,6 +2419,7 @@ if test "$curl_ssl_msg" = "$init_ssl_msg"; then
       LIBS="$CLEANLIBS"
     ])
   fi
+  test -z "$ssl_msg" || ssl_backends="${ssl_backends:+$ssl_backends, }$ssl_msg"
 fi
 
 if test "x$OPENSSL_ENABLED$GNUTLS_ENABLED$NSS_ENABLED$POLARSSL_ENABLED$MBEDTLS_ENABLED$AXTLS_ENABLED$CYASSL_ENABLED$WINSSL_ENABLED$DARWINSSL_ENABLED" = "x"; then
@@ -2410,6 +2429,10 @@ else
   # SSL is enabled, genericly
   AC_SUBST(SSL_ENABLED)
   SSL_ENABLED="1"
+fi
+
+if test -n "$ssl_backends"; then
+  curl_ssl_msg="enabled ($ssl_backends)"
 fi
 
 dnl **********************************************************************
