@@ -25,7 +25,8 @@
 #if defined(USE_OPENSSL)                                \
   || defined(USE_AXTLS)                                 \
   || defined(USE_GSKIT)                                 \
-  || (defined(USE_SCHANNEL) && defined(_WIN32_WCE))
+  || (defined(USE_SCHANNEL) && defined(_WIN32_WCE))     \
+  || defined(USE_MULTISSL)
 /* these backends use functions from this file */
 
 #ifdef HAVE_NETINET_IN_H

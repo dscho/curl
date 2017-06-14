@@ -79,13 +79,14 @@ void Curl_ossl_sha256sum(const unsigned char *tmp, /* input */
 
 bool Curl_ossl_cert_status_request(void);
 
+enum curlssl_features Curl_ossl_get_features(void);
+
 /* Support HTTPS-proxy */
 #define HTTPS_PROXY_SUPPORT 1
 
 /* Set the API backend definition to OpenSSL */
+#ifndef USE_MULTISSL
 #define CURL_SSL_BACKEND CURLSSLBACKEND_OPENSSL
-
-enum curlssl_features Curl_ossl_get_features(void);
 
 /* API setup for OpenSSL */
 #define curlssl_init Curl_ossl_init
@@ -112,6 +113,7 @@ enum curlssl_features Curl_ossl_get_features(void);
 
 #define DEFAULT_CIPHER_SELECTION \
   "ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH"
+#endif /* !USE_MULTISSL */
 
 #endif /* USE_OPENSSL */
 #endif /* HEADER_CURL_SSLUSE_H */

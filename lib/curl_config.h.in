@@ -948,6 +948,9 @@
 /* Define to enable metalink support */
 #undef USE_METALINK
 
+/* to enable Windows native SSL/TLS support */
+#undef USE_MULTISSL
+
 /* if nghttp2 is in use */
 #undef USE_NGHTTP2
 

@@ -94,10 +94,11 @@ size_t Curl_schannel_version(char *buffer, size_t size);
 
 CURLcode Curl_schannel_random(unsigned char *entropy, size_t length);
 
-/* Set the API backend definition to Schannel */
-#define CURL_SSL_BACKEND CURLSSLBACKEND_SCHANNEL
-
 enum curlssl_features Curl_schannel_get_features(void);
+
+/* Set the API backend definition to Schannel */
+#ifndef USE_MULTISSL
+#define CURL_SSL_BACKEND CURLSSLBACKEND_SCHANNEL
 
 /* API setup for Schannel */
 #define curlssl_init Curl_schannel_init
@@ -116,6 +117,7 @@ enum curlssl_features Curl_schannel_get_features(void);
 #define curlssl_check_cxn(x) ((void)x, -1)
 #define curlssl_data_pending Curl_schannel_data_pending
 #define curlssl_random(x,y,z) ((void)x, Curl_schannel_random(y,z))
+#endif /* !USE_MULTISSL */
 
 #endif /* USE_SCHANNEL */
 #endif /* HEADER_CURL_SCHANNEL_H */
