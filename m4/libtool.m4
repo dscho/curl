@@ -728,6 +728,7 @@ _LT_CONFIG_SAVE_COMMANDS([
     cat <<_LT_EOF >> "$cfgfile"
 #! $SHELL
 # Generated automatically by $as_me ($PACKAGE) $VERSION
+# Libtool was configured on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 
 # Provide generalized library-building support services.
@@ -2886,18 +2887,6 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*)
   dynamic_linker='GNU/Linux ld.so'
   ;;
 
-netbsdelf*-gnu)
-  version_type=linux
-  need_lib_prefix=no
-  need_version=no
-  library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
-  soname_spec='${libname}${release}${shared_ext}$major'
-  shlibpath_var=LD_LIBRARY_PATH
-  shlibpath_overrides_runpath=no
-  hardcode_into_libs=yes
-  dynamic_linker='NetBSD ld.elf_so'
-  ;;
-
 netbsd*)
   version_type=sunos
   need_lib_prefix=no
@@ -3557,7 +3546,7 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*)
   lt_cv_deplibs_check_method=pass_all
   ;;
 
-netbsd* | netbsdelf*-gnu)
+netbsd*)
   if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
     lt_cv_deplibs_check_method='match_pattern /lib[[^/]]+(\.so\.[[0-9]]+\.[[0-9]]+|_pic\.a)$'
   else
@@ -4123,7 +4112,7 @@ static const void *lt_preloaded_setup() {
 #endif
 _LT_EOF
 	  # Now try linking the two files.
-	  mv -f conftest.$ac_objext conftstm.$ac_objext
+	  mv conftest.$ac_objext conftstm.$ac_objext
 	  lt_globsym_save_LIBS=$LIBS
 	  lt_globsym_save_CFLAGS=$CFLAGS
 	  LIBS=conftstm.$ac_objext
@@ -4435,7 +4424,7 @@ m4_if([$1], [CXX], [
 	    ;;
 	esac
 	;;
-      netbsd* | netbsdelf*-gnu)
+      netbsd*)
 	;;
       *qnx* | *nto*)
         # QNX uses GNU C++, but need to define -shared option too, otherwise
@@ -4947,9 +4936,6 @@ m4_if([$1], [CXX], [
       ;;
     esac
     ;;
-  linux* | k*bsd*-gnu | gnu*)
-    _LT_TAGVAR(link_all_deplibs, $1)=no
-    ;;
   *)
     _LT_TAGVAR(export_symbols_cmds, $1)='$NM $libobjs $convenience | $global_symbol_pipe | $SED '\''s/.* //'\'' | sort | uniq > $export_symbols'
     ;;
@@ -5011,9 +4997,6 @@ dnl Note also adjust exclude_expsyms for C++ above.
     ;;
   openbsd* | bitrig*)
     with_gnu_ld=no
-    ;;
-  linux* | k*bsd*-gnu | gnu*)
-    _LT_TAGVAR(link_all_deplibs, $1)=no
     ;;
   esac
 
@@ -5269,7 +5252,7 @@ _LT_EOF
       fi
       ;;
 
-    netbsd* | netbsdelf*-gnu)
+    netbsd*)
       if echo __ELF__ | $CC -E - | $GREP __ELF__ >/dev/null; then
 	_LT_TAGVAR(archive_cmds, $1)='$LD -Bshareable $libobjs $deplibs $linker_flags -o $lib'
 	wlarc=
@@ -5676,9 +5659,9 @@ _LT_EOF
 
     hpux9*)
       if test yes = "$GCC"; then
-	_LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -shared $pic_flag $wl+b $wl$install_libdir -o $output_objdir/$soname $libobjs $deplibs $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv -f $output_objdir/$soname $lib'
+	_LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -shared $pic_flag $wl+b $wl$install_libdir -o $output_objdir/$soname $libobjs $deplibs $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv $output_objdir/$soname $lib'
       else
-	_LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$LD -b +b $install_libdir -o $output_objdir/$soname $libobjs $deplibs $linker_flags~test "x$output_objdir/$soname" = "x$lib" || mv -f $output_objdir/$soname $lib'
+	_LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$LD -b +b $install_libdir -o $output_objdir/$soname $libobjs $deplibs $linker_flags~test "x$output_objdir/$soname" = "x$lib" || mv $output_objdir/$soname $lib'
       fi
       _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='$wl+b $wl$libdir'
       _LT_TAGVAR(hardcode_libdir_separator, $1)=:
@@ -5790,7 +5773,6 @@ _LT_EOF
 	if test yes = "$lt_cv_irix_exported_symbol"; then
           _LT_TAGVAR(archive_expsym_cmds, $1)='$CC -shared $pic_flag $libobjs $deplibs $compiler_flags $wl-soname $wl$soname `test -n "$verstring" && func_echo_all "$wl-set_version $wl$verstring"` $wl-update_registry $wl$output_objdir/so_locations $wl-exports_file $wl$export_symbols -o $lib'
 	fi
-	_LT_TAGVAR(link_all_deplibs, $1)=no
       else
 	_LT_TAGVAR(archive_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -o $lib'
 	_LT_TAGVAR(archive_expsym_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags -soname $soname `test -n "$verstring" && func_echo_all "-set_version $verstring"` -update_registry $output_objdir/so_locations -exports_file $export_symbols -o $lib'
@@ -5812,7 +5794,7 @@ _LT_EOF
       esac
       ;;
 
-    netbsd* | netbsdelf*-gnu)
+    netbsd*)
       if echo __ELF__ | $CC -E - | $GREP __ELF__ >/dev/null; then
 	_LT_TAGVAR(archive_cmds, $1)='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'  # a.out
       else
@@ -6804,7 +6786,7 @@ if test yes != "$_lt_caught_CXX_error"; then
             _LT_TAGVAR(ld_shlibs, $1)=no
             ;;
           aCC*)
-            _LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -b $wl+b $wl$install_libdir -o $output_objdir/$soname $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv -f $output_objdir/$soname $lib'
+            _LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -b $wl+b $wl$install_libdir -o $output_objdir/$soname $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv $output_objdir/$soname $lib'
             # Commands to make compiler produce verbose output that lists
             # what "hidden" libraries, object files and flags are used when
             # linking a shared library.
@@ -6817,7 +6799,7 @@ if test yes != "$_lt_caught_CXX_error"; then
             ;;
           *)
             if test yes = "$GXX"; then
-              _LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -shared -nostdlib $pic_flag $wl+b $wl$install_libdir -o $output_objdir/$soname $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv -f $output_objdir/$soname $lib'
+              _LT_TAGVAR(archive_cmds, $1)='$RM $output_objdir/$soname~$CC -shared -nostdlib $pic_flag $wl+b $wl$install_libdir -o $output_objdir/$soname $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags~test "x$output_objdir/$soname" = "x$lib" || mv $output_objdir/$soname $lib'
             else
               # FIXME: insert proper C++ library support
               _LT_TAGVAR(ld_shlibs, $1)=no
@@ -6953,8 +6935,8 @@ if test yes != "$_lt_caught_CXX_error"; then
 	    # KCC will only create a shared library if the output file
 	    # ends with ".so" (or ".sl" for HP-UX), so rename the library
 	    # to its proper name (with version) after linking.
-	    _LT_TAGVAR(archive_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv -f \$templib $lib'
-	    _LT_TAGVAR(archive_expsym_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib $wl-retain-symbols-file,$export_symbols; mv -f \$templib $lib'
+	    _LT_TAGVAR(archive_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv \$templib $lib'
+	    _LT_TAGVAR(archive_expsym_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo $lib | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib $wl-retain-symbols-file,$export_symbols; mv \$templib $lib'
 	    # Commands to make compiler produce verbose output that lists
 	    # what "hidden" libraries, object files and flags are used when
 	    # linking a shared library.
@@ -7152,7 +7134,7 @@ if test yes != "$_lt_caught_CXX_error"; then
 	    # KCC will only create a shared library if the output file
 	    # ends with ".so" (or ".sl" for HP-UX), so rename the library
 	    # to its proper name (with version) after linking.
-	    _LT_TAGVAR(archive_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo "$lib" | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv -f \$templib $lib'
+	    _LT_TAGVAR(archive_cmds, $1)='tempext=`echo $shared_ext | $SED -e '\''s/\([[^()0-9A-Za-z{}]]\)/\\\\\1/g'\''`; templib=`echo "$lib" | $SED -e "s/\$tempext\..*/.so/"`; $CC $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags --soname $soname -o \$templib; mv \$templib $lib'
 
 	    _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='$wl-rpath,$libdir'
 	    _LT_TAGVAR(hardcode_libdir_separator, $1)=:
@@ -8263,7 +8245,7 @@ for lt_ac_sed in $lt_ac_sed_list /usr/xpg4/bin/sed; do
   fi
   while true; do
     cat conftest.in conftest.in >conftest.tmp
-    mv -f conftest.tmp conftest.in
+    mv conftest.tmp conftest.in
     cp conftest.in conftest.nl
     echo >>conftest.nl
     $lt_ac_sed -e 's/a$//' < conftest.nl >conftest.out || break
