@@ -82,7 +82,7 @@
 #include "cookie.h"
 #include "formdata.h"
 
-#ifdef USE_OPENSSL
+#if defined(USE_OPENSSL) || defined(USE_MULTISSL)
 #include <openssl/ssl.h>
 #ifdef HAVE_OPENSSL_ENGINE_H
 #include <openssl/engine.h>
@@ -136,12 +136,14 @@
 #undef realloc
 #endif /* USE_AXTLS */
 
-#if defined(USE_SCHANNEL) || defined(USE_WINDOWS_SSPI)
+#if defined(USE_SCHANNEL) || defined(USE_WINDOWS_SSPI) || defined(USE_MULTISSL)
 #include "curl_sspi.h"
 #endif
-#ifdef USE_SCHANNEL
+#if defined(USE_SCHANNEL) || defined(USE_MULTISSL)
 #include <schnlsp.h>
 #include <schannel.h>
+#undef OCSP_REQUEST
+#undef OCSP_RESPONSE
 #endif
 
 #ifdef USE_DARWINSSL
@@ -240,7 +242,7 @@ enum protection_level {
 };
 #endif
 
-#ifdef USE_SCHANNEL
+#if defined(USE_SCHANNEL) || defined(USE_MULTISSL)
 /* Structs to store Schannel handles */
 struct curl_schannel_cred {
   CredHandle cred_handle;
@@ -278,9 +280,9 @@ struct ssl_connect_data {
   bool use;
   ssl_connection_state state;
   ssl_connect_state connecting_state;
-#if defined(USE_OPENSSL) || defined(USE_SCHANNEL)
+#if defined(USE_OPENSSL) || defined(USE_SCHANNEL) || defined(USE_MULTISSL)
   union {
-#if defined(USE_OPENSSL)
+#if defined(USE_OPENSSL) || defined(USE_MULTISSL)
     struct {
       /* these ones requires specific SSL-types */
       SSL_CTX* ctx;
@@ -288,7 +290,7 @@ struct ssl_connect_data {
       X509*    server_cert;
     } openssl;
 #endif
-#if defined(USE_SCHANNEL)
+#if defined(USE_SCHANNEL) || defined(USE_MULTISSL)
     struct schannel {
       struct curl_schannel_cred *cred;
       struct curl_schannel_ctxt *ctxt;
@@ -1423,7 +1425,8 @@ struct UrlState {
   void *resolver; /* resolver state, if it is used in the URL state -
                      ares_channel f.e. */
 
-#if defined(USE_OPENSSL) && defined(HAVE_OPENSSL_ENGINE_H)
+#if (defined(USE_OPENSSL) || defined(USE_MULTISSL)) \
+  && defined(HAVE_OPENSSL_ENGINE_H)
   ENGINE *engine;
 #endif /* USE_OPENSSL */
   struct timeval expiretime; /* set this with Curl_expire() only */

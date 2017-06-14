@@ -23,6 +23,7 @@
  ***************************************************************************/
 #include "curl_setup.h"
 
+#include "multissl.h"       /* OpenSSL & WinSSL, must be first #include */
 #include "openssl.h"        /* OpenSSL versions */
 #include "gtls.h"           /* GnuTLS versions */
 #include "nssg.h"           /* NSS versions */

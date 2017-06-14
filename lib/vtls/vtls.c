@@ -138,10 +138,31 @@ void Curl_free_primary_ssl_config(struct ssl_primary_config* sslc)
   Curl_safefree(sslc->clientcert);
 }
 
+#ifdef USE_MULTISSL
+static int ssl_backend = -1;
+
+int Curl_ssl_backend(void)
+{
+  if (ssl_backend < 0) {
+    const char *env = getenv("CURL_SSL_BACKEND");
+
+    if (env && !strcmp(env, "schannel"))
+      ssl_backend = CURLSSLBACKEND_SCHANNEL;
+    else {
+      if (env && strcmp(env, "openssl"))
+        fprintf(stderr, "Unknown SSL backend '%s', falling back to OpenSSL\n",
+		env);
+      ssl_backend = CURLSSLBACKEND_OPENSSL;
+    }
+  }
+  return (int)ssl_backend;
+}
+#else
 int Curl_ssl_backend(void)
 {
   return (int)CURL_SSL_BACKEND;
 }
+#endif
 
 #ifdef USE_SSL
 
@@ -509,7 +530,7 @@ void Curl_ssl_close_all(struct Curl_easy *data)
 
 #if defined(USE_OPENSSL) || defined(USE_GNUTLS) || defined(USE_SCHANNEL) || \
   defined(USE_DARWINSSL) || defined(USE_POLARSSL) || defined(USE_NSS) || \
-  defined(USE_MBEDTLS)
+  defined(USE_MBEDTLS) || defined(USE_MULTISSL)
 int Curl_ssl_getsock(struct connectdata *conn, curl_socket_t *socks,
                      int numsocks)
 {

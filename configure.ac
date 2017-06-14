@@ -1340,6 +1340,61 @@ dnl -------------------------------------------------
 dnl check winssl option before other SSL libraries
 dnl -------------------------------------------------
 
+OPT_MULTISSL=no
+AC_ARG_WITH(multissl,dnl
+AC_HELP_STRING([--with-multissl],[enable OpenSSL \& Windows native SSL/TLS])
+AC_HELP_STRING([--without-multissl], [disable OpenSSL \& Windows native SSL/TLS]),
+  OPT_MULTISSL=$withval)
+
+AC_MSG_CHECKING([whether to enable OpenSSL \& Windows native SSL/TLS (Windows native builds only)])
+if test "$curl_ssl_msg" = "$init_ssl_msg"; then
+  if test "x$OPT_MULTISSL" != "xno"  &&
+     test "x$curl_cv_native_windows" = "xyes"; then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(USE_MULTISSL, 1, [to enable Windows native SSL/TLS support])
+    AC_SUBST(USE_MULTISSL, [1])
+    curl_ssl_msg="enabled (OpenSSL & Windows-native)"
+    WINSSL_ENABLED=1
+    # --with-winssl implies --enable-sspi
+    AC_DEFINE(USE_WINDOWS_SSPI, 1, [to enable SSPI support])
+    AC_SUBST(USE_WINDOWS_SSPI, [1])
+    curl_sspi_msg="enabled"
+    LIBS="-lcrypt32 $LIBS"
+
+    CURL_CHECK_PKGCONFIG(openssl, [$OPENSSL_PCDIR])
+
+    if test "$PKGCONFIG" != "no" ; then
+      SSL_LIBS=`CURL_EXPORT_PCDIR([$OPENSSL_PCDIR]) dnl
+        $PKGCONFIG --libs-only-l openssl 2>/dev/null`
+
+      SSL_LDFLAGS=`CURL_EXPORT_PCDIR([$OPENSSL_PCDIR]) dnl
+        $PKGCONFIG --libs-only-L openssl 2>/dev/null`
+
+      SSL_CPPFLAGS=`CURL_EXPORT_PCDIR([$OPENSSL_PCDIR]) dnl
+        $PKGCONFIG --cflags-only-I openssl 2>/dev/null`
+
+      AC_SUBST(SSL_LIBS)
+      AC_MSG_NOTICE([pkg-config: SSL_LIBS: "$SSL_LIBS"])
+      AC_MSG_NOTICE([pkg-config: SSL_LDFLAGS: "$SSL_LDFLAGS"])
+      AC_MSG_NOTICE([pkg-config: SSL_CPPFLAGS: "$SSL_CPPFLAGS"])
+
+      LIB_OPENSSL=`echo $SSL_LDFLAGS | sed -e 's/-L//g'`
+
+      dnl use the values pkg-config reported.  This is here
+      dnl instead of below with CPPFLAGS and LDFLAGS because we only
+      dnl learn about this via pkg-config.  If we only have
+      dnl the argument to --with-ssl we don't know what
+      dnl additional libs may be necessary.  Hope that we
+      dnl don't need any.
+      LIBS="$SSL_LIBS $LIBS"
+    fi
+  else
+    AC_MSG_RESULT(no)
+  fi
+else
+  AC_MSG_RESULT(no)
+fi
+
 OPT_WINSSL=no
 AC_ARG_WITH(winssl,dnl
 AC_HELP_STRING([--with-winssl],[enable Windows native SSL/TLS])

@@ -392,6 +392,13 @@ static CURLcode getinfo_slist(struct Curl_easy *data, CURLINFO info,
             tsi->internals = (void *)&conn->ssl[i].ssl;
 #elif defined(USE_SCHANNEL)
             tsi->internals = (void *)&conn->ssl[i].backend.schannel.ctxt->ctxt_handle;
+#elif defined(USE_MULTISSL)
+            tsi->internals = tsi->backend == CURLSSLBACKEND_SCHANNEL ?
+               (void *)&conn->ssl[i].backend.schannel.ctxt->ctxt_handle :
+               /* Legacy: CURLINFO_TLS_SESSION must return an SSL_CTX pointer. */
+              ((info == CURLINFO_TLS_SESSION) ?
+                (void *)conn->ssl[i].backend.openssl.ctx :
+                (void *)conn->ssl[i].backend.openssl.handle);
 #elif defined(USE_SSL)
 #error "SSL backend specific information missing for CURLINFO_TLS_SSL_PTR"
 #endif
