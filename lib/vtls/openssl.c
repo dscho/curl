@@ -3454,6 +3454,4 @@ const struct Curl_ssl Curl_ssl_openssl = {
 #endif
 };
 
-const struct Curl_ssl *Curl_ssl = &Curl_ssl_openssl;
-
 #endif /* USE_OPENSSL */
