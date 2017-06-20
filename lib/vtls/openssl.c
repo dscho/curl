@@ -799,6 +799,18 @@ void Curl_ossl_cleanup(void)
 #endif
 }
 
+enum curlssl_features Curl_ossl_get_features(void)
+{
+  /* this backend supports the CAPATH option */
+  return have_curlssl_ca_path
+  /* this backend supports CURLOPT_CERTINFO */
+    | have_curlssl_certinfo
+  /* this backend supports CURLOPT_SSL_CTX_* */
+    | have_curlssl_ssl_ctx
+  /* this backend supports CURLOPT_PINNEDPUBLICKEY */
+    | have_curlssl_pinnedpubkey;
+}
+
 /*
  * This function is used to determine connection status.
  *

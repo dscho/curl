@@ -50,15 +50,12 @@ int Curl_polarssl_shutdown(struct connectdata *conn, int sockindex);
 /* Set the API backend definition to PolarSSL */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_POLARSSL
 
-/* this backend supports the CAPATH option */
-#define have_curlssl_ca_path 1
-
-/* this backends supports CURLOPT_PINNEDPUBLICKEY */
-#define have_curlssl_pinnedpubkey 1
+enum curlssl_features Curl_polarssl_get_features(void);
 
 /* API setup for PolarSSL */
 #define curlssl_init() Curl_polarssl_init()
 #define curlssl_cleanup() Curl_polarssl_cleanup()
+#define curlssl_get_features() Curl_polarssl_get_features()
 #define curlssl_connect Curl_polarssl_connect
 #define curlssl_connect_nonblocking Curl_polarssl_connect_nonblocking
 #define curlssl_session_free(x)  Curl_polarssl_session_free(x)

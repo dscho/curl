@@ -864,6 +864,14 @@ void Curl_polarssl_cleanup(void)
   (void)Curl_polarsslthreadlock_thread_cleanup();
 }
 
+enum curlssl_features Curl_polarssl_get_features(void)
+{
+  /* this backend supports the CAPATH option */
+  return have_curlssl_ca_path
+  /* this backends supports CURLOPT_PINNEDPUBLICKEY */
+    | have_curlssl_pinnedpubkey;
+}
+
 
 int Curl_polarssl_data_pending(const struct connectdata *conn, int sockindex)
 {

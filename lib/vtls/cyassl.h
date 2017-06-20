@@ -63,16 +63,12 @@ void Curl_cyassl_sha256sum(const unsigned char *tmp, /* input */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_CYASSL
 
 /* this backend supports CURLOPT_SSL_CTX_* */
-#define have_curlssl_ssl_ctx 1
-
-#ifdef KEEP_PEER_CERT
-/* this backend supports CURLOPT_PINNEDPUBLICKEY */
-#define have_curlssl_pinnedpubkey 1
-#endif
+enum curlssl_features Curl_cyassl_get_features(void);
 
 /* API setup for CyaSSL */
 #define curlssl_init Curl_cyassl_init
 #define curlssl_cleanup() Curl_nop_stmt
+#define curlssl_get_features Curl_cyassl_get_features
 #define curlssl_connect Curl_cyassl_connect
 #define curlssl_connect_nonblocking Curl_cyassl_connect_nonblocking
 #define curlssl_session_free(x)  Curl_cyassl_session_free(x)

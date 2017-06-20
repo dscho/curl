@@ -85,21 +85,12 @@ bool Curl_ossl_cert_status_request(void);
 /* Set the API backend definition to OpenSSL */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_OPENSSL
 
-/* this backend supports the CAPATH option */
-#define have_curlssl_ca_path 1
-
-/* this backend supports CURLOPT_CERTINFO */
-#define have_curlssl_certinfo 1
-
-/* this backend supports CURLOPT_SSL_CTX_* */
-#define have_curlssl_ssl_ctx 1
-
-/* this backend supports CURLOPT_PINNEDPUBLICKEY */
-#define have_curlssl_pinnedpubkey 1
+enum curlssl_features Curl_ossl_get_features(void);
 
 /* API setup for OpenSSL */
 #define curlssl_init Curl_ossl_init
 #define curlssl_cleanup Curl_ossl_cleanup
+#define curlssl_get_features Curl_ossl_get_features
 #define curlssl_connect Curl_ossl_connect
 #define curlssl_connect_nonblocking Curl_ossl_connect_nonblocking
 #define curlssl_session_free(x) Curl_ossl_session_free(x)

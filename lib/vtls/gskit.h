@@ -47,12 +47,12 @@ int Curl_gskit_check_cxn(struct connectdata *cxn);
 /* Set the API backend definition to GSKit */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_GSKIT
 
-/* this backend supports CURLOPT_CERTINFO */
-#define have_curlssl_certinfo 1
+curlssl_features Curl_gskit_get_features(void);
 
 /* API setup for GSKit */
 #define curlssl_init Curl_gskit_init
 #define curlssl_cleanup Curl_gskit_cleanup
+#define curlssl_get_features Curl_gskit_get_features
 #define curlssl_connect Curl_gskit_connect
 #define curlssl_connect_nonblocking Curl_gskit_connect_nonblocking
 
