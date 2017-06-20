@@ -315,7 +315,7 @@ AWK = gawk
 BLANK_AT_MAKETIME = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -Werror-implicit-function-declaration -O2 -Wno-system-headers
+CFLAGS = -Werror-implicit-function-declaration -g -Wno-system-headers
 CFLAG_CURL_SYMBOL_HIDING = 
 CONFIGURE_OPTIONS = " '--prefix=/mingw64' '--without-random' '--enable-static' '--enable-shared' '--enable-sspi' '--with-libmetalink=/mingw64' '--with-multissl'"
 CPP = gcc -E
