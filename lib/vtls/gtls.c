@@ -211,6 +211,16 @@ int Curl_gtls_cleanup(void)
   return 1;
 }
 
+enum curlssl_features Curl_gtls_get_features(void)
+{
+  /* this backend supports the CAPATH option */
+  return have_curlssl_ca_path
+    /* this backend supports CURLOPT_CERTINFO */
+    | have_curlssl_certinfo
+    /* this backend supports CURLOPT_PINNEDPUBLICKEY */
+    | have_curlssl_pinnedpubkey;
+}
+
 #ifndef CURL_DISABLE_VERBOSE_STRINGS
 static void showtime(struct Curl_easy *data,
                      const char *text,

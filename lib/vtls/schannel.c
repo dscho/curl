@@ -1561,6 +1561,12 @@ void Curl_schannel_cleanup(void)
   Curl_sspi_global_cleanup();
 }
 
+enum curlssl_features Curl_schannel_get_features(void)
+{
+  /* this backend supports CURLOPT_CERTINFO */
+  return have_curlssl_certinfo;
+}
+
 size_t Curl_schannel_version(char *buffer, size_t size)
 {
   size = snprintf(buffer, size, "WinSSL");

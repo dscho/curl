@@ -1418,6 +1418,16 @@ void Curl_nss_cleanup(void)
   initialized = 0;
 }
 
+enum curlssl_features Curl_nss_get_features(void)
+{
+  /* this backend supports the CAPATH option */
+  return have_curlssl_ca_path
+  /* this backend supports CURLOPT_CERTINFO */
+    | have_curlssl_certinfo
+  /* this backends supports CURLOPT_PINNEDPUBLICKEY */
+    | have_curlssl_pinnedpubkey;
+}
+
 /*
  * This function uses SSL_peek to determine connection status.
  *

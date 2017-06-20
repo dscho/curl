@@ -441,6 +441,13 @@ void Curl_gskit_cleanup(void)
 }
 
 
+curlssl_features Curl_gskit_get_features(void)
+{
+  /* this backend supports CURLOPT_CERTINFO */
+  return have_curlssl_certinfo;
+}
+
+
 static CURLcode init_environment(struct Curl_easy *data,
                                  gsk_handle *envir, const char *appid,
                                  const char *file, const char *label,

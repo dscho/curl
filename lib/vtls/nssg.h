@@ -71,18 +71,12 @@ bool Curl_nss_false_start(void);
 /* Set the API backend definition to NSS */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_NSS
 
-/* this backend supports the CAPATH option */
-#define have_curlssl_ca_path 1
-
-/* this backend supports CURLOPT_CERTINFO */
-#define have_curlssl_certinfo 1
-
-/* this backends supports CURLOPT_PINNEDPUBLICKEY */
-#define have_curlssl_pinnedpubkey 1
+enum curlssl_features Curl_nss_get_features(void);
 
 /* API setup for NSS */
 #define curlssl_init Curl_nss_init
 #define curlssl_cleanup Curl_nss_cleanup
+#define curlssl_get_features Curl_nss_get_features
 #define curlssl_connect Curl_nss_connect
 #define curlssl_connect_nonblocking Curl_nss_connect_nonblocking
 

@@ -1002,6 +1002,14 @@ void Curl_mbedtls_cleanup(void)
   (void)Curl_polarsslthreadlock_thread_cleanup();
 }
 
+enum curlssl_features Curl_mbedtls_get_features(void)
+{
+  /* this backends supports CURLOPT_PINNEDPUBLICKEY */
+  return have_curlssl_pinnedpubkey
+  /* this backend supports CURLOPT_SSL_CTX_* */
+    | have_curlssl_ssl_ctx;
+}
+
 int Curl_mbedtls_data_pending(const struct connectdata *conn, int sockindex)
 {
   return mbedtls_ssl_get_bytes_avail(&conn->ssl[sockindex].ssl) != 0;

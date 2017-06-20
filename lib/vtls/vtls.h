@@ -69,11 +69,19 @@ void Curl_free_primary_ssl_config(struct ssl_primary_config* sslc);
 int Curl_ssl_getsock(struct connectdata *conn, curl_socket_t *socks,
                      int numsocks);
 
+enum curlssl_features {
+	have_curlssl_ca_path = 1,
+	have_curlssl_certinfo = 2,
+	have_curlssl_pinnedpubkey = 4,
+	have_curlssl_ssl_ctx = 8
+};
+
 int Curl_ssl_backend(void);
 
 #ifdef USE_SSL
 int Curl_ssl_init(void);
 void Curl_ssl_cleanup(void);
+enum curlssl_features Curl_ssl_get_features(void);
 CURLcode Curl_ssl_connect(struct connectdata *conn, int sockindex);
 CURLcode Curl_ssl_connect_nonblocking(struct connectdata *conn,
                                       int sockindex,
@@ -178,6 +186,7 @@ bool Curl_ssl_false_start(void);
 /* When SSL support is not present, just define away these function calls */
 #define Curl_ssl_init() 1
 #define Curl_ssl_cleanup() Curl_nop_stmt
+#define Curl_ssl_get_features() 0
 #define Curl_ssl_connect(x,y) CURLE_NOT_BUILT_IN
 #define Curl_ssl_close_all(x) Curl_nop_stmt
 #define Curl_ssl_close(x,y) Curl_nop_stmt

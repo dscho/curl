@@ -759,6 +759,17 @@ int Curl_cyassl_init(void)
 }
 
 
+enum curlssl_features Curl_cyassl_get_features(void)
+{
+  return have_curlssl_ssl_ctx
+#ifdef KEEP_PEER_CERT
+    /* this backend supports CURLOPT_PINNEDPUBLICKEY */
+    | have_curlssl_pinnedpubkey
+#endif
+    ;
+}
+
+
 bool Curl_cyassl_data_pending(const struct connectdata* conn, int connindex)
 {
   if(conn->ssl[connindex].handle)   /* SSL is in use */

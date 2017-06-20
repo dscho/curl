@@ -175,6 +175,11 @@ void Curl_ssl_cleanup(void)
   }
 }
 
+enum curlssl_features Curl_ssl_get_features(void)
+{
+  return curlssl_get_features();
+}
+
 static bool ssl_prefs_check(struct Curl_easy *data)
 {
   /* check for CURLOPT_SSLVERSION invalid parameter value */

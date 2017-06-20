@@ -63,18 +63,12 @@ bool Curl_gtls_cert_status_request(void);
 /* Set the API backend definition to GnuTLS */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_GNUTLS
 
-/* this backend supports the CAPATH option */
-#define have_curlssl_ca_path 1
-
-/* this backend supports CURLOPT_CERTINFO */
-#define have_curlssl_certinfo 1
-
-/* this backend supports CURLOPT_PINNEDPUBLICKEY */
-#define have_curlssl_pinnedpubkey 1
+enum curlssl_features Curl_gtls_get_features(void);
 
 /* API setup for GnuTLS */
 #define curlssl_init Curl_gtls_init
 #define curlssl_cleanup Curl_gtls_cleanup
+#define curlssl_get_features Curl_gtls_get_features
 #define curlssl_connect Curl_gtls_connect
 #define curlssl_connect_nonblocking Curl_gtls_connect_nonblocking
 #define curlssl_session_free(x)  Curl_gtls_session_free(x)

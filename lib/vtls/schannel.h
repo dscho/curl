@@ -97,12 +97,12 @@ CURLcode Curl_schannel_random(unsigned char *entropy, size_t length);
 /* Set the API backend definition to Schannel */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_SCHANNEL
 
-/* this backend supports CURLOPT_CERTINFO */
-#define have_curlssl_certinfo 1
+enum curlssl_features Curl_schannel_get_features(void);
 
 /* API setup for Schannel */
 #define curlssl_init Curl_schannel_init
 #define curlssl_cleanup Curl_schannel_cleanup
+#define curlssl_get_features Curl_schannel_get_features
 #define curlssl_connect Curl_schannel_connect
 #define curlssl_connect_nonblocking Curl_schannel_connect_nonblocking
 #define curlssl_session_free Curl_schannel_session_free
