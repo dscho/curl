@@ -386,8 +386,8 @@ static CURLcode getinfo_slist(struct Curl_easy *data, CURLINFO info,
 #elif defined(USE_OPENSSL)
             /* Legacy: CURLINFO_TLS_SESSION must return an SSL_CTX pointer. */
             tsi->internals = ((info == CURLINFO_TLS_SESSION) ?
-                              (void *)conn->ssl[i].ctx :
-                              (void *)conn->ssl[i].handle);
+                              (void *)conn->ssl[i].backend.openssl.ctx :
+                              (void *)conn->ssl[i].backend.openssl.handle);
 #elif defined(USE_POLARSSL)
             tsi->internals = (void *)&conn->ssl[i].ssl;
 #elif defined(USE_SCHANNEL)

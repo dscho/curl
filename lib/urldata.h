@@ -279,10 +279,16 @@ struct ssl_connect_data {
   ssl_connection_state state;
   ssl_connect_state connecting_state;
 #if defined(USE_OPENSSL)
-  /* these ones requires specific SSL-types */
-  SSL_CTX* ctx;
-  SSL*     handle;
-  X509*    server_cert;
+  union {
+#if defined(USE_OPENSSL)
+    struct {
+      /* these ones requires specific SSL-types */
+      SSL_CTX* ctx;
+      SSL*     handle;
+      X509*    server_cert;
+    } openssl;
+#endif
+  } backend;
 #elif defined(USE_GNUTLS)
   gnutls_session_t session;
   gnutls_certificate_credentials_t cred;
