@@ -391,7 +391,7 @@ static CURLcode getinfo_slist(struct Curl_easy *data, CURLINFO info,
 #elif defined(USE_POLARSSL)
             tsi->internals = (void *)&conn->ssl[i].ssl;
 #elif defined(USE_SCHANNEL)
-            tsi->internals = (void *)&conn->ssl[i].ctxt->ctxt_handle;
+            tsi->internals = (void *)&conn->ssl[i].backend.schannel.ctxt->ctxt_handle;
 #elif defined(USE_SSL)
 #error "SSL backend specific information missing for CURLINFO_TLS_SSL_PTR"
 #endif
