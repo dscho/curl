@@ -984,4 +984,63 @@ bool Curl_ssl_false_start(void)
 #endif
 }
 
+/*
+ * Default implementations for unsupported functions.
+ */
+
+int Curl_none_init(void)
+{
+  return 1;
+}
+
+void Curl_none_cleanup(void)
+{ }
+
+CURLcode Curl_none_shutdown(struct connectdata *conn, int sockindex)
+{
+  return 0;
+}
+
+int Curl_none_check_cxn(struct connectdata *conn)
+{
+  return -1;
+}
+
+CURLcode Curl_none_random(struct Curl_easy *data, unsigned char *entropy,
+			  size_t length)
+{
+  return CURLE_NOT_BUILT_IN;
+}
+
+void Curl_none_close_all(struct Curl_easy *data)
+{ }
+
+void Curl_none_session_free(void *ptr)
+{ }
+
+bool Curl_none_data_pending(const struct connectdata *conn, int connindex)
+{
+  return 0;
+}
+
+CURLcode Curl_none_set_engine(struct Curl_easy *data, const char *engine)
+{
+  return CURLE_NOT_BUILT_IN;
+}
+
+CURLcode Curl_none_set_engine_default(struct Curl_easy *data)
+{
+  return CURLE_NOT_BUILT_IN;
+}
+
+struct curl_slist *Curl_none_engines_list(struct Curl_easy *data)
+{
+  return (struct curl_slist *)NULL;
+}
+
+bool Curl_none_false_start(void)
+{
+  return FALSE;
+}
+
 #endif /* USE_SSL */

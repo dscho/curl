@@ -54,6 +54,8 @@ void Curl_darwinssl_sha256sum(unsigned char *tmp, /* input */
                            size_t sha256len);
 bool Curl_darwinssl_false_start(void);
 
+const struct Curl_ssl Curl_ssl_darwinssl;
+
 /* Set the API backend definition to SecureTransport */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_DARWINSSL
 
