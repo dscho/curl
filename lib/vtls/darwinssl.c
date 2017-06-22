@@ -2721,10 +2721,10 @@ static CURlcode Curl_darwinssl_md5sum(unsigned char *tmp, /* input */
   return CURLE_OK;
 }
 
-void Curl_darwinssl_sha256sum(unsigned char *tmp, /* input */
-                           size_t tmplen,
-                           unsigned char *sha256sum, /* output */
-                           size_t sha256len)
+static void Curl_darwinssl_sha256sum(unsigned char *tmp, /* input */
+                                     size_t tmplen,
+                                     unsigned char *sha256sum, /* output */
+                                     size_t sha256len)
 {
   assert(sha256len >= SHA256_DIGEST_LENGTH);
   (void)CC_SHA256(tmp, (CC_LONG)tmplen, sha256sum);
@@ -2865,7 +2865,8 @@ const struct Curl_ssl Curl_ssl_darwinssl = {
   Curl_none_set_engine_default,       /* set_engine_default */
   Curl_none_engines_list,             /* engines_list */
   Curl_darwinssl_false_start,         /* false_start */
-  Curl_darwinssl_md5sum               /* md5sum */
+  Curl_darwinssl_md5sum,              /* md5sum */
+  Curl_darwinssl_sha256sum            /* sha256sum */
 };
 
 const struct Curl_ssl *Curl_ssl = &Curl_ssl_darwinssl;
