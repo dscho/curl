@@ -2866,4 +2866,6 @@ const struct Curl_ssl Curl_ssl_darwinssl = {
   Curl_darwinssl_false_start          /* false_start */
 };
 
+const struct Curl_ssl *Curl_ssl = &Curl_ssl_darwinssl;
+
 #endif /* USE_DARWINSSL */
