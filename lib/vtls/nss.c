@@ -2264,10 +2264,10 @@ CURLcode Curl_nss_random(struct Curl_easy *data,
   return CURLE_OK;
 }
 
-void Curl_nss_md5sum(unsigned char *tmp, /* input */
-                     size_t tmplen,
-                     unsigned char *md5sum, /* output */
-                     size_t md5len)
+static CURLcode Curl_nss_md5sum(unsigned char *tmp, /* input */
+                                size_t tmplen,
+                                unsigned char *md5sum, /* output */
+                                size_t md5len)
 {
   PK11Context *MD5pw = PK11_CreateDigestContext(SEC_OID_MD5);
   unsigned int MD5out;
@@ -2275,6 +2275,8 @@ void Curl_nss_md5sum(unsigned char *tmp, /* input */
   PK11_DigestOp(MD5pw, tmp, curlx_uztoui(tmplen));
   PK11_DigestFinal(MD5pw, md5sum, &MD5out, curlx_uztoui(md5len));
   PK11_DestroyContext(MD5pw, PR_TRUE);
+
+  return CURLE_OK;
 }
 
 void Curl_nss_sha256sum(const unsigned char *tmp, /* input */
@@ -2329,7 +2331,8 @@ const struct Curl_ssl Curl_ssl_nss = {
   Curl_none_set_engine,         /* set_engine */
   Curl_none_set_engine_default, /* set_engine_default */
   Curl_none_engines_list,       /* engines_list */
-  Curl_nss_false_start          /* false_start */
+  Curl_nss_false_start,         /* false_start */
+  Curl_nss_md5sum               /* md5sum */
 };
 
 const struct Curl_ssl *Curl_ssl = &Curl_ssl_nss;
