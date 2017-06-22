@@ -55,6 +55,9 @@ struct Curl_ssl {
   struct curl_slist *(*engines_list)(struct Curl_easy *data);
 
   bool (*false_start)(void);
+
+  CURLcode (*md5sum)(unsigned char *input, size_t inputlen,
+                     unsigned char *md5sum, size_t md5sumlen);
 };
 
 extern const struct Curl_ssl *Curl_ssl;
@@ -72,6 +75,8 @@ CURLcode Curl_none_set_engine(struct Curl_easy *data, const char *engine);
 CURLcode Curl_none_set_engine_default(struct Curl_easy *data);
 struct curl_slist *Curl_none_engines_list(struct Curl_easy *data);
 bool Curl_none_false_start(void);
+CURLcode Curl_none_md5sum(unsigned char *input, size_t inputlen,
+                          unsigned char *md5sum, size_t md5len);
 
 #include "openssl.h"        /* OpenSSL versions */
 #include "gtls.h"           /* GnuTLS versions */
