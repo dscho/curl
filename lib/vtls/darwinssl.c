@@ -2693,7 +2693,7 @@ bool Curl_darwinssl_data_pending(const struct connectdata *conn,
     return false;
 }
 
-CURLcode Curl_darwinssl_random(unsigned char *entropy,
+CURLcode Curl_darwinssl_random(struct Curl_easy *data, uunsigned char *entropy,
                                size_t length)
 {
   /* arc4random_buf() isn't available on cats older than Lion, so let's
