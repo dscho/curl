@@ -57,6 +57,8 @@ struct Curl_ssl {
   bool (*false_start)(void);
 };
 
+extern const struct Curl_ssl *Curl_ssl;
+
 int Curl_none_init(void);
 void Curl_none_cleanup(void);
 CURLcode Curl_none_shutdown(struct connectdata *conn, int sockindex);

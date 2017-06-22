@@ -1810,4 +1810,5 @@ const struct Curl_ssl Curl_ssl_gtls = {
   Curl_none_false_start          /* false_start */
 };
 
+const struct Curl_ssl *Curl_ssl = &Curl_ssl_gtls;
 #endif /* USE_GNUTLS */

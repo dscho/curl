@@ -895,4 +895,6 @@ const struct Curl_ssl Curl_ssl_polarssl = {
   Curl_ssl_false_start               /* false_start */
 };
 
+const struct Curl_ssl *Curl_ssl = &Curl_ssl_polarssl;
+
 #endif /* USE_POLARSSL */

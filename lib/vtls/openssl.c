@@ -3398,4 +3398,6 @@ const struct Curl_ssl Curl_ssl_openssl = {
   Curl_ssl_false_start           /* false_start */
 };
 
+const struct Curl_ssl *Curl_ssl = &Curl_ssl_openssl;
+
 #endif /* USE_OPENSSL */
