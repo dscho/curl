@@ -35,17 +35,16 @@ struct Curl_ssl {
   int (*check_cxn)(struct connectdata *cxn);
   int (*shutdown)(struct connectdata *conn, int sockindex);
   bool (*data_pending)(const struct connectdata *conn,
-		       int connindex);
+                       int connindex);
 
   /* return 0 if a find random is filled in */
   CURLcode (*random)(struct Curl_easy *data, unsigned char *entropy,
-		     size_t length);
+                     size_t length);
   bool (*cert_status_request)(void);
 
   CURLcode (*connect)(struct connectdata *conn, int sockindex);
-  CURLcode (*connect_nonblocking)(struct connectdata *conn,
-				  int sockindex,
-				  bool *done);
+  CURLcode (*connect_nonblocking)(struct connectdata *conn, int sockindex,
+                                  bool *done);
   void (*close)(struct connectdata *conn, int sockindex);
   void (*close_all)(struct Curl_easy *data);
   void (*session_free)(void *ptr);
