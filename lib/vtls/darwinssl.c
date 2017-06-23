@@ -2556,17 +2556,13 @@ darwinssl_connect_common(struct connectdata *conn,
   return CURLE_OK;
 }
 
-CURLcode
-Curl_darwinssl_connect_nonblocking(struct connectdata *conn,
-                                   int sockindex,
-                                   bool *done)
+static CURLcode Curl_darwinssl_connect_nonblocking(struct connectdata *conn,
+                                                   int sockindex, bool *done)
 {
   return darwinssl_connect_common(conn, sockindex, TRUE, done);
 }
 
-CURLcode
-Curl_darwinssl_connect(struct connectdata *conn,
-                       int sockindex)
+static CURLcode Curl_darwinssl_connect(struct connectdata *conn, int sockindex)
 {
   CURLcode result;
   bool done = FALSE;
@@ -2581,7 +2577,7 @@ Curl_darwinssl_connect(struct connectdata *conn,
   return CURLE_OK;
 }
 
-void Curl_darwinssl_close(struct connectdata *conn, int sockindex)
+static void Curl_darwinssl_close(struct connectdata *conn, int sockindex)
 {
   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
 
@@ -2602,7 +2598,7 @@ void Curl_darwinssl_close(struct connectdata *conn, int sockindex)
   connssl->ssl_sockfd = 0;
 }
 
-int Curl_darwinssl_shutdown(struct connectdata *conn, int sockindex)
+static int Curl_darwinssl_shutdown(struct connectdata *conn, int sockindex)
 {
   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
   struct Curl_easy *data = conn->data;
@@ -2655,7 +2651,7 @@ int Curl_darwinssl_shutdown(struct connectdata *conn, int sockindex)
   return rc;
 }
 
-void Curl_darwinssl_session_free(void *ptr)
+static void Curl_darwinssl_session_free(void *ptr)
 {
   /* ST, as of iOS 5 and Mountain Lion, has no public method of deleting a
      cached session ID inside the Security framework. There is a private
@@ -2666,7 +2662,7 @@ void Curl_darwinssl_session_free(void *ptr)
   Curl_safefree(ptr);
 }
 
-size_t Curl_darwinssl_version(char *buffer, size_t size)
+static size_t Curl_darwinssl_version(char *buffer, size_t size)
 {
   return snprintf(buffer, size, "SecureTransport");
 }
@@ -2679,7 +2675,7 @@ size_t Curl_darwinssl_version(char *buffer, size_t size)
  *     0 means the connection has been closed
  *    -1 means the connection status is unknown
  */
-int Curl_darwinssl_check_cxn(struct connectdata *conn)
+static int Curl_darwinssl_check_cxn(struct connectdata *conn)
 {
   struct ssl_connect_data *connssl = &conn->ssl[FIRSTSOCKET];
   OSStatus err;
@@ -2694,8 +2690,8 @@ int Curl_darwinssl_check_cxn(struct connectdata *conn)
   return 0;
 }
 
-bool Curl_darwinssl_data_pending(const struct connectdata *conn,
-                                 int connindex)
+static bool Curl_darwinssl_data_pending(const struct connectdata *conn,
+                                        int connindex)
 {
   const struct ssl_connect_data *connssl = &conn->ssl[connindex];
   OSStatus err;
@@ -2711,8 +2707,8 @@ bool Curl_darwinssl_data_pending(const struct connectdata *conn,
     return false;
 }
 
-CURLcode Curl_darwinssl_random(struct Curl_easy *data UNUSED_PARAM,
-                               unsigned char *entropy, size_t length)
+static CURLcode Curl_darwinssl_random(struct Curl_easy *data UNUSED_PARAM,
+                                      unsigned char *entropy, size_t length)
 {
   /* arc4random_buf() isn't available on cats older than Lion, so let's
      do this manually for the benefit of the older cats. */
@@ -2748,7 +2744,7 @@ static void Curl_darwinssl_sha256sum(const unsigned char *tmp, /* input */
   (void)CC_SHA256(tmp, (CC_LONG)tmplen, sha256sum);
 }
 
-bool Curl_darwinssl_false_start(void)
+static bool Curl_darwinssl_false_start(void)
 {
 #if CURL_BUILD_MAC_10_9 || CURL_BUILD_IOS_7
   if(SSLSetSessionOption != NULL)
