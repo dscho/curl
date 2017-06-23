@@ -1742,9 +1742,9 @@ CURLcode Curl_gtls_random(struct Curl_easy *data,
 }
 
 static CURLcode Curl_gtls_md5sum(unsigned char *tmp, /* input */
-				 size_t tmplen,
-				 unsigned char *md5sum, /* output */
-				 size_t md5len)
+                                 size_t tmplen,
+                                 unsigned char *md5sum, /* output */
+                                 size_t md5len)
 {
 #if defined(USE_GNUTLS_NETTLE)
   struct md5_ctx MD5pw;
