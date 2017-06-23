@@ -1569,7 +1569,7 @@ size_t Curl_schannel_version(char *buffer, size_t size)
 }
 
 CURLcode Curl_schannel_random(struct Curl_easy *data, unsigned char *entropy,
-			      size_t length)
+                              size_t length)
 {
   HCRYPTPROV hCryptProv = 0;
 
