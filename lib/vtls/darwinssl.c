@@ -2864,8 +2864,8 @@ const struct Curl_ssl Curl_ssl_darwinssl = {
   Curl_none_set_engine,               /* set_engine */
   Curl_none_set_engine_default,       /* set_engine_default */
   Curl_none_engines_list,             /* engines_list */
-  Curl_darwinssl_false_start          /* false_start */
-  Curl_darwinssl_md5sum,              /* md5sum */
+  Curl_darwinssl_false_start,         /* false_start */
+  Curl_darwinssl_md5sum               /* md5sum */
 };
 
 const struct Curl_ssl *Curl_ssl = &Curl_ssl_darwinssl;
