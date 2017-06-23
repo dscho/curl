@@ -2266,9 +2266,9 @@ CURLcode Curl_nss_random(struct Curl_easy *data,
 }
 
 static CURLcode Curl_nss_md5sum(unsigned char *tmp, /* input */
-				size_t tmplen,
-				unsigned char *md5sum, /* output */
-				size_t md5len)
+                                size_t tmplen,
+                                unsigned char *md5sum, /* output */
+                                size_t md5len)
 {
   PK11Context *MD5pw = PK11_CreateDigestContext(SEC_OID_MD5);
   unsigned int MD5out;
