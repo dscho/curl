@@ -3341,9 +3341,9 @@ CURLcode Curl_ossl_random(struct Curl_easy *data, unsigned char *entropy,
 }
 
 static CURLcode Curl_ossl_md5sum(unsigned char *tmp, /* input */
-				 size_t tmplen,
-				 unsigned char *md5sum /* output */,
-				 size_t unused)
+                                 size_t tmplen,
+                                 unsigned char *md5sum /* output */,
+                                 size_t unused)
 {
   MD5_CTX MD5pw;
   (void)unused;
