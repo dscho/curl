@@ -1816,6 +1816,7 @@ static void *Curl_schannel_get_internals(struct ssl_connect_data *connssl,
 
 const struct Curl_ssl Curl_ssl_schannel = {
   "schannel",                        /* name */
+  CURLSSLBACKEND_SCHANNEL,
 
   0, /* have_ca_path */
   1, /* have_certinfo */
