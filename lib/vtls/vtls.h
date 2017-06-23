@@ -66,7 +66,7 @@ void Curl_none_cleanup(void);
 CURLcode Curl_none_shutdown(struct connectdata *conn, int sockindex);
 int Curl_none_check_cxn(struct connectdata *conn);
 CURLcode Curl_none_random(struct Curl_easy *data, unsigned char *entropy,
-			  size_t length);
+                          size_t length);
 void Curl_none_close_all(struct Curl_easy *data);
 void Curl_none_session_free(void *ptr);
 bool Curl_none_data_pending(const struct connectdata *conn, int connindex);
