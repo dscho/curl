@@ -981,7 +981,7 @@ int Curl_none_check_cxn(struct connectdata *conn)
 }
 
 CURLcode Curl_none_random(struct Curl_easy *data, unsigned char *entropy,
-			  size_t length)
+                          size_t length)
 {
   return CURLE_NOT_BUILT_IN;
 }
