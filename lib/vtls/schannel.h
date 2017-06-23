@@ -93,7 +93,7 @@ void Curl_schannel_cleanup(void);
 size_t Curl_schannel_version(char *buffer, size_t size);
 
 CURLcode Curl_schannel_random(struct Curl_easy *data, unsigned char *entropy,
-			      size_t length);
+                              size_t length);
 
 const struct Curl_ssl Curl_ssl_schannel;
 
