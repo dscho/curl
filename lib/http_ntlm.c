@@ -41,7 +41,10 @@
 #include "vauth/vauth.h"
 #include "url.h"
 
-#if defined(USE_NSS)
+#if !defined(USE_OPENSSL) && \
+    !defined(USE_GNUTLS_NETTLE) && \
+    !defined(USE_GNUTLS) && \
+    defined(USE_NSS)
 #include "vtls/nssg.h"
 #elif defined(USE_WINDOWS_SSPI)
 #include "curl_sspi.h"
@@ -129,7 +132,10 @@ CURLcode Curl_output_ntlm(struct connectdata *conn, bool proxy)
   DEBUGASSERT(conn);
   DEBUGASSERT(conn->data);
 
-#ifdef USE_NSS
+#if !defined(USE_OPENSSL) && \
+    !defined(USE_GNUTLS_NETTLE) && \
+    !defined(USE_GNUTLS) && \
+    defined(USE_NSS)
   if(CURLE_OK != Curl_nss_force_init(conn->data))
     return CURLE_OUT_OF_MEMORY;
 #endif
