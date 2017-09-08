@@ -44,7 +44,10 @@
 #include "rand.h"
 #include "vtls/vtls.h"
 
-#ifdef USE_NSS
+#if !defined(USE_OPENSSL) && \
+    !defined(USE_GNUTLS_NETTLE) && \
+    !defined(USE_GNUTLS) && \
+    defined(USE_NSS)
 #include "vtls/nssg.h" /* for Curl_nss_force_init() */
 #endif
 
@@ -272,7 +275,10 @@ CURLcode Curl_auth_decode_ntlm_type2_message(struct Curl_easy *data,
   unsigned char *type2 = NULL;
   size_t type2_len = 0;
 
-#if defined(USE_NSS)
+#if !defined(USE_OPENSSL) && \
+    !defined(USE_GNUTLS_NETTLE) && \
+    !defined(USE_GNUTLS) && \
+    defined(USE_NSS)
   /* Make sure the crypto backend is initialized */
   result = Curl_nss_force_init(data);
   if(result)
