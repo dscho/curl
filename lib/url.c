@@ -504,10 +504,16 @@ CURLcode Curl_init_userdefined(struct Curl_easy *data)
 #if defined(__MINGW32__)
     const size_t path_max = PATH_MAX;
     char relocated[PATH_MAX], *relative;
+    size_t len;
     get_dll_path(relocated, path_max);
     strip_n_suffix_folders(relocated, 1);
     strncat(relocated, "/", path_max);
-    relative = get_relative_path(CURL_BINDIR, CURL_CA_BUNDLE);
+    if((len = strlen(relocated)) > 18 &&
+       !strcmp(relocated + len - 18, "/libexec/git-core/")) {
+      /* Hack for Git for Windows */
+      relative = strdup("../../ssl/certs/ca-bundle.crt");
+    } else
+      relative = get_relative_path(CURL_BINDIR, CURL_CA_BUNDLE);
     strncat(relocated, relative, path_max - 1);
     simplify_path(relocated);
     result = Curl_setstropt(&set->str[STRING_SSL_CAFILE_ORIG], relocated);
