@@ -490,6 +490,12 @@ static CURLcode readwrite_data(struct Curl_easy *data,
     if(bytestoread) {
       /* receive data from the network! */
       result = Curl_read(conn, conn->sockfd, k->buf, bytestoread, &nread);
+fprintf(stderr, "%s:%d Curl_read returned %d\n", __FILE__, __LINE__, (int)result);
+
+      if(CURLE_HTTP2_STREAM == result && data->set.errorbuffer &&
+	 strstr(data->set.errorbuffer, "HTTP_1_1_REQUIRED")) {
+fprintf(stderr, "%s:%d HTTP_1_1_REQUIRED\n", __FILE__, __LINE__);
+      }
 
       /* read would've blocked */
       if(CURLE_AGAIN == result)
@@ -547,6 +553,7 @@ static CURLcode readwrite_data(struct Curl_easy *data,
       /* we are in parse-the-header-mode */
       bool stop_reading = FALSE;
       result = Curl_http_readwrite_headers(data, conn, &nread, &stop_reading);
+fprintf(stderr, "%s:%d Curl_http_readwrite_headers returned %d\n", __FILE__, __LINE__, (int)result);
       if(result)
         return result;
 

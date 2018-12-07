@@ -1954,6 +1954,25 @@ static CURLMcode multi_runsingle(struct Curl_multi *multi,
           result = CURLE_OK;
           done = TRUE;
         }
+      } else if(CURLE_HTTP2_STREAM == result && data->set.errorbuffer &&
+                strstr(data->set.errorbuffer, "HTTP_1_1_REQUIRED")) {
+        CURLcode ret = Curl_retry_request(data->easy_conn, &newurl);
+fprintf(stderr, "%s:%d HTTP_1_1_REQUIRED!!!\n", __FILE__, __LINE__);
+        infof(data, "Forcing HTTP/1.1 for NTLM");
+        data->set.httpversion = CURL_HTTP_VERSION_1_1;
+
+        if(!ret)
+          retry = (newurl)?TRUE:FALSE;
+        else
+          result = ret;
+
+        if(retry) {
+          /* if we are to retry, set the result to OK and consider the
+             request as done */
+          result = CURLE_OK;
+          done = TRUE;
+        }
+        //connclose(conn, "Force HTTP/1.1 connection");
       }
 
       if(result) {
