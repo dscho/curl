@@ -69,7 +69,7 @@ sanitise_path(char * path)
     *path_p = '/';
   }
   /* Replace any '//' with '/' */
-  path_p = path;
+  path_p = path + !!*path; /* skip first character, if any, to handle UNC paths correctly */
   while ((path_p = strstr (path_p, "//")) != NULL)
   {
     memmove (path_p, path_p + 1, path_size--);
